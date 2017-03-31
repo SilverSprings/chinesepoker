@@ -1,0 +1,43 @@
+#board {		
+  width: 1200px;
+  height: 750px;
+  margin: 20px auto;
+  border-style: solid;
+  border-color: black;
+  padding: 20px;
+}
+
+#player1 {
+   width: 1150px;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.playerCPU {
+   width: 1150px;
+   height:360px;
+   margin-left: auto;
+   margin-right: auto;	
+}
+
+#player2 {
+   width:110px;
+   margin-right: 20px;
+   height:auto;
+   float: left;
+}
+
+#player3 {	
+   width:280px;
+   float: left;
+   margin-top: 140px;   
+   margin-left: 300px;
+   margin-right: 300px;   
+}
+
+#player4 {
+   width:110px;
+   margin-left: 20px;   
+   height:auto;
+   float: left;   
+}

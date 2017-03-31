@@ -1,0 +1,16 @@
+<div *ngIf="deck" id="board">
+	<div id="player1">
+		<app-player [hidden]="allPlayersReady" (doneSorting)="handReadyPlayer1($event)" [player]="{num:1, pos:'top'}" [handDealt]="hands[0]"></app-player>
+	</div>
+	<div class="playerCPU">
+		<div id="player2">
+			<app-other-player [hidden]="allPlayersReady" (doneSorting)="handReadyPlayer2($event)" [player]="{num:2, pos:'left'}" [hand]="hands[1]"></app-other-player>
+		</div>
+		<div id="player3">
+			<app-other-player [hidden]="allPlayersReady" (doneSorting)="handReadyPlayer3($event)" [player]="{num:3, pos:'middle'}" [hand]="hands[2]"></app-other-player>
+		</div>
+		<div id="player4">
+			<app-other-player [hidden]="allPlayersReady" (doneSorting)="handReadyPlayer4($event)" [player]="{num:4, pos:'right'}" [hand]="hands[3]"></app-other-player>
+		</div>
+	</div>	
+</div>
