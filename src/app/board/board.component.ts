@@ -10,10 +10,12 @@ export class BoardComponent implements OnInit {
   deck:any;
   hands: any = [];  
   allPlayersReady = false;
-  player1Ready = false;
+  player1Ready = true;
   player2Ready = false;
   player3Ready = false;
   player4Ready = false;
+  
+  allHands = {player2Hand:{},player3Hand:{},player4Hand:{}};
   
   constructor(private cardsService: CardsService) { }
 
@@ -41,28 +43,35 @@ export class BoardComponent implements OnInit {
 	});		
   }
   
-  handReadyPlayer1(handPlayer1) {
+  /*handReadyPlayer1(handPlayer1) {
 	this.player1Ready = true;
 	console.log('in handReadyPlayer1',handPlayer1, this.player1Ready  );
-  }
+	this.allHands["player1Hand"] = handPlayer1;
+  }*/
   
   handReadyPlayer2(handPlayer2) {
 	this.player2Ready = true;
 	console.log('in handReadyPlayer2',handPlayer2, this.player2Ready  );
+	this.allHands["player2Hand"] = handPlayer2;
+	this.allHands.player2Hand["name"] = 'left';
   }
 
   handReadyPlayer3(handPlayer3) {
 	this.player3Ready = true;
 	console.log('in handReadyPlayer3',handPlayer3, this.player3Ready  );
+	this.allHands["player3Hand"] = handPlayer3;
+	this.allHands.player3Hand["name"] = 'middle';	
   }  
 
   handReadyPlayer4(handPlayer4) {
 	this.player4Ready = true;
 	console.log('in handReadyPlayer4',handPlayer4, this.player4Ready  );
+	this.allHands["player4Hand"] = handPlayer4;
+	this.allHands.player4Hand["name"] = 'right';	
   } 
   
   ngDoCheck() {
-	if (this.player1Ready == true && this.player2Ready == true && this.player3Ready == true ) {
+	if (this.player1Ready == true && this.player2Ready == true && this.player3Ready == true && this.player4Ready == true) {
 		this.allPlayersReady = true;
 	}
   
