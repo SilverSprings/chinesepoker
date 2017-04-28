@@ -1,0 +1,55 @@
+<div class="playerName">
+	<!--div>
+		<p>Player {{allHands.player1Hand.name}}</p>
+	</div-->
+	<div class="eachName">
+		<p>Player {{allHands.player2Hand.name}}</p>
+	</div>
+	<div class="eachName">
+		<p>Player {{allHands.player3Hand.name}}</p>
+	</div>
+	<div class="eachName">
+		<p>Player {{allHands.player4Hand.name}}</p>
+	</div>	
+</div>
+<div class="firstHand">
+	<!--div>
+		<p>Player {{allHands.player1Hand.name}}</p>
+	</div-->
+	<div class="P1fHand"> 
+		<div *ngFor="let card of allHands.player2Hand.fHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand">
+		<div *ngFor="let card of allHands.player3Hand.fHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand">
+		<div *ngFor="let card of allHands.player4Hand.fHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+</div>
+
+<div class="middleHand">
+	<!--div>
+		<p>Player {{allHands.player1Hand.name}}</p>
+	</div-->
+	<div class="P1fHand"> 
+		<div *ngFor="let card of allHands.player2Hand.mHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand">
+		<div *ngFor="let card of allHands.player3Hand.mHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand">
+		<div *ngFor="let card of allHands.player4Hand.mHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+</div>
