@@ -12,6 +12,7 @@ import { PlayerComponent } from './player/player.component';
 
 import { CardsService } from './cards.service';
 import { OtherPlayerComponent } from './other-player/other-player.component';
+import { ResultsComponent } from './results/results.component';
 
 // Define the routes
 const ROUTES = [
@@ -35,7 +36,8 @@ const ROUTES = [
     AppComponent,
     BoardComponent,
     PlayerComponent,
-    OtherPlayerComponent
+    OtherPlayerComponent,
+    ResultsComponent
   ],
   imports: [
     BrowserModule,
