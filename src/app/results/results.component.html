@@ -2,6 +2,9 @@
 	<!--div>
 		<p>Player {{allHands.player1Hand.name}}</p>
 	</div-->
+	<div class="eachName">  
+		<p>Player {{allHands.player1Hand.name}}</p> 
+	</div>
 	<div class="eachName">
 		<p>Player {{allHands.player2Hand.name}}</p>
 	</div>
@@ -15,7 +18,11 @@
 <div class="firstHand">
 	<!--div>
 		<p>Player {{allHands.player1Hand.name}}</p>
-	</div-->
+	</div-->		
+ 	<div class="P1fHand">
+		<div *ngFor="let card of allHands.player1Hand.fHand.cards;let i = index" class="cardPlayer">  
+			<img [src]="card.image" class="cardPlayer">  
+		</div> </div>
 	<div class="P1fHand"> 
 		<div *ngFor="let card of allHands.player2Hand.fHand.cards;let i = index" class="cardPlayer">
 			<img [src]="card.image" class="cardPlayer">
@@ -37,6 +44,10 @@
 	<!--div>
 		<p>Player {{allHands.player1Hand.name}}</p>
 	</div-->
+ 	<div class="P1fHand">
+		<div *ngFor="let card of allHands.player1Hand.mHand.cards;let i = index" class="cardPlayer">  
+			<img [src]="card.image" class="cardPlayer">  
+		</div> </div>
 	<div class="P1fHand"> 
 		<div *ngFor="let card of allHands.player2Hand.mHand.cards;let i = index" class="cardPlayer">
 			<img [src]="card.image" class="cardPlayer">
