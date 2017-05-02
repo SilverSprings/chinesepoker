@@ -17,93 +17,87 @@ export class ResultsComponent implements OnInit {
 	var urlToReplace = 'http://deckofcardsapi.com';
 	var urlOfServer = 'http://127.0.0.1:8000';
 	
-	this.allHands.player2Hand.fHand["winningHand"] = false;
+	for (let _p = 1; _p < 5; _i++) {
+		this.allHands["player"+_p+"Hand"].fHand["winningHand"] = false;
+		this.allHands["player"+_p+"Hand"].mHand["winningHand"] = false;
+		this.allHands["player"+_p+"Hand"].lHand["winningHand"] = false;
+		for (let _i = 0; _i < 3; _i++) { 
+			this.allHands["player"+_p+"Hand"].fHand.cards[_i].image = this.allHands["player"+_p+"Hand"].fHand.cards[_i].image.replace(urlToReplace, urlOfServer);	
+		}
+		for (let _i = 0; _i < 5; _i++) { 
+			this.allHands["player"+_p+"Hand"].mHand.cards[_i].image = this.allHands["player"+_p+"Hand"].mHand.cards[_i].image.replace(urlToReplace, urlOfServer);
+			this.allHands["player"+_p+"Hand"].lHand.cards[_i].image = this.allHands["player"+_p+"Hand"].lHand.cards[_i].image.replace(urlToReplace, urlOfServer);			
+		}
+	}
 	
-	for (let _i = 0; _i < 3; _i++) { 
-		this.allHands.player1Hand.fHand.cards[_i].image = this.allHands.player1Hand.fHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player2Hand.fHand.cards[_i].image = this.allHands.player2Hand.fHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player3Hand.fHand.cards[_i].image = this.allHands.player3Hand.fHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player4Hand.fHand.cards[_i].image = this.allHands.player4Hand.fHand.cards[_i].image.replace(urlToReplace, urlOfServer);		
-	}
-	for (let _i = 0; _i < 5; _i++) { 
-		this.allHands.player1Hand.mHand.cards[_i].image = this.allHands.player1Hand.mHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player2Hand.mHand.cards[_i].image = this.allHands.player2Hand.mHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player3Hand.mHand.cards[_i].image = this.allHands.player3Hand.mHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player4Hand.mHand.cards[_i].image = this.allHands.player4Hand.mHand.cards[_i].image.replace(urlToReplace, urlOfServer);		
-	}
-	for (let _i = 0; _i < 5; _i++) { 
-		this.allHands.player1Hand.lHand.cards[_i].image = this.allHands.player1Hand.lHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player2Hand.lHand.cards[_i].image = this.allHands.player2Hand.lHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player3Hand.lHand.cards[_i].image = this.allHands.player3Hand.lHand.cards[_i].image.replace(urlToReplace, urlOfServer);
-		this.allHands.player4Hand.lHand.cards[_i].image = this.allHands.player4Hand.lHand.cards[_i].image.replace(urlToReplace, urlOfServer);		
-	}	
 	console.log(this.allHands);
+	
 	let arrayFirstHand = [this.allHands.player1Hand.fHand, this.allHands.player2Hand.fHand, this.allHands.player3Hand.fHand, this.allHands.player4Hand.fHand];
-	this.winnerFirstHand = this.whoIsTheFirstHandWinner(arrayFirstHand);
+	this.winnerFirstHand = this.whoHasTheWinnningHand(arrayFirstHand, 'f');
+	let arrayMiddleHand = [this.allHands.player1Hand.mHand, this.allHands.player2Hand.mHand, this.allHands.player3Hand.mHand, this.allHands.player4Hand.mHand];
+	this.winnerMiddleHand = this.whoHasTheWinnningHand(arrayMiddleHand, 'm');
+	let arrayLastHand = [this.allHands.player1Hand.lHand, this.allHands.player2Hand.lHand, this.allHands.player3Hand.lHand, this.allHands.player4Hand.lHand];	
+	this.winnerLastHand = this.whoHasTheWinnningHand(arrayLastHand, 'l');
   }
 
-  whoIsTheFirstHandWinner(arrayFH) {
+  whoHasTheWinnningHand(arrayFH, fml) {
 	
-	//for the first hand, what is the best hand between the player ?  
+	//What is the best hand between the players ? we store that in topHandValue  
 	let topHandValue = -1;
 	let topHandType = '';
-	let arrayHandValue = arrayFH.map(f => f.handValue);
+	//arrayHandValue contains only the hand value (from 8 to 0)
+	let arrayHandValue = arrayFH.map(hf => hf.handValue);
 	
 	topHandValue = Math.max(...arrayHandValue); 
 
 	//for the first hand, how many players has the same hand ?  
-	let potentialWinnerName = '';
+	let winnerName = '';
 	let potentialWinnerNum = [];
-	let subValue = [];
+	let potentialWinner = [];
 
 	for (let _j = 0; _j < 4; _j++) {
 		if (arrayFH[_j].handValue == topHandValue) {
 			topHandType = arrayFH[_j].handType;
 			potentialWinnerNum.push(_j + 1);  
-			subValue.push(arrayFH[_j].handSubValue);
+			potentialWinner.push(arrayFH[_j]);
 		}
 	}
+
+	let countPotentialWinner = potentialWinnerNum.length ;
 	
-	//already a winner if there is only one player that has this hand
-	if (potentialWinnerNum.length == 1) { 
-		potentialWinnerName = this.allHands["player"+potentialWinnerNum[0]+"Hand"].name;
-		this.allHands["player"+potentialWinnerNum[0]+"Hand"].fHand.winningHand = true;
-		let winnerString = potentialWinnerName + ' wins with ' + topHandType;
+	//already a winner if there is only one player that matches this hand
+	if (countPotentialWinner == 1) { 
+		winnerName = this.allHands["player"+potentialWinnerNum[0]+"Hand"].name;
+		this.allHands["player"+potentialWinnerNum[0]+"Hand"][fml + "Hand"].winningHand = true;
+		let winnerString = winnerName + ' wins with ' + topHandType;
 		return winnerString;
 	} 		
 
-	//otherwise, we need to compare the subvalues
-	let countPotentialWinner = potentialWinnerNum.length ;
-
-	//1st subvalue : what is the best ?
-	let subValue1 = subValue.map(s => s[0]);
-	topSubValue1 = Math.max(...subValue1);
-	if (subValue1.every(s => s == 1)) topSubValue1 = 1;
+	//otherwise, we need to compare the subvalue
+	//subValue : what is the best subValue between the potential winner ? we store that in topSubValue
+	let subValue = potentialWinner.map(hf => hf.handSubValue);
+	let topSubValue = Math.max(...subValue);
 	
-	//we populate potentialWinnerNumSubV1
-	let potentialWinnerNumSubV1 = [];
+	//How many potential winners match the topSubValue ? 
+	let winnerCount = 0;
 	for (let _j = 0; _j < countPotentialWinner; _j++) { 
-		if (subValue[_j][0] == topSubValue1) {			
-			potentialWinnerNumSubV1.push(potentialWinnerNum[_j]);
-			potentialWinner.push(compareSubValue[_j]);			
+		if (potentialWinner[_j].handSubValue == topSubValue) {
+			if (winnerCount != 0) winnerName += ' and';
+			winnerCount++;
+			winnerName += this.allHands["player"+potentialWinnerNum[_j]+"Hand"].name;
+			this.allHands["player"+potentialWinnerNum[_j]+"Hand"][fml + "Hand"].winningHand = true;		
+		}
 	}
 	
-	//if only one hand matches 1st subvalue, no need to go further  
-	if (potentialWinner.length == 1)  { 
-		potentialWinnerName = this.allHands["player"+potentialWinnerNum[0]+"Hand"].name;
-		this.allHands["player"+potentialWinnerNum[0]+"Hand"].fHand.winningHand = true;		
-		let winnerString = potentialWinnerName + ' wins with ' + topHandType;
+	//if only one hand matches topSubValue, there is only one winner
+	if (winnerCount == 1)  {
+		let winnerString = winnerName + ' wins with ' + topHandType;
 		return winnerString;
-	} 
-	
-	//2nd subvalue : what is the best between the potential winners?	
-	let topSubValue2 = -1;
-	topSubValue2 = Math.max();
-
-	let topSubValue3 = -1;	
-
-	//topSubValue2 = Math.max(compareSubValue[0][1],compareSubValue[1][1],compareSubValue[2][1]);
-	//topSubValue3 = Math.max(compareSubValue[0][2],compareSubValue[1][2],compareSubValue[2][2]);
+	//else, there is a draw
+	} else {
+		let winnerString = winnerName + ' win with ' + topHandType;
+		return winnerString;
+	}
   }
 }
 

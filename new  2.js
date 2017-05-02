@@ -41,8 +41,9 @@ export class RankerService {
 			val = 0;
 		}
 		
-		if (hand.length = 5) subval = [hand[0].v,hand[1].v,hand[2].v,hand[3].v,hand[4].v];
-		if (hand.length = 3) subval = [hand[0].v,hand[1].v,hand[2].v];
+		if (hand.length = 5) subval = this.subValCalc(val,[[hand[0].v,hand[1].v,hand[2].v,hand[3].v,hand[4].v]]);
+
+		if (hand.length = 3) subval = this.subValCalc(val,[hand[0].v,hand[1].v,hand[2].v]]);
 		
 		return {
 			hand:hand,
@@ -68,10 +69,10 @@ export class RankerService {
 
 		// suits is an array : every item is a set of suited cards of at least 5 cards
 		var suits = [];
-		if (sSuit.length > 4) suits.push({suitFlush:sSuit}); 
-		if (hSuit.length > 4) suits.push({suitFlush:hSuit});
-		if (cSuit.length > 4) suits.push({suitFlush:cSuit});
-		if (dSuit.length > 4) suits.push({suitFlush:dSuit});	
+		if (sSuit.length > 4) suits.push(sSuit); 
+		if (hSuit.length > 4) suits.push(hSuit);
+		if (cSuit.length > 4) suits.push(cSuit);
+		if (dSuit.length > 4) suits.push(dSuit);	
 		
 		//if suits is empty, it means there is no flush, so no straight flush and no need to go futher 
 		if (suits.length == 0) return false;
@@ -79,7 +80,7 @@ export class RankerService {
 		//straightSuit is an array : every item is a set of the best straigh flush of 5 cards
 		var straightSuits = [];
 		for (var j=0; j < suits.length; j++) {
-			var straightFlush = this.isStraight(suitFlush[j]);
+			var straightFlush = this.isStraight(suits[j]);
 			if (straightFlush) straightSuits.push(straightFlush); 
 		}
 		
@@ -90,14 +91,14 @@ export class RankerService {
 		var topValue = -1;			
 		for (var j=0; j < straightSuits.length; j++) {
 			//check on royal straigth flush - no need to go futher if so
-			if (straightSuits[j].suitFlush[0].v == 1) {
+			if (straightSuits[j][0].v == 1) {
 				isStraightFlush = straightSuits[j];
 				return isStraightFlush;
 			}
 			//among straightSuit, which one is the best straight flush ? 
-			else if (straightSuits[j].suitFlush[0].v > topValue) {
+			else if (straightSuits[j][0].v > topValue) {
 				isStraightFlush = straightSuits[j];
-				topValue = straightSuits[j].suitFlush[i].v;
+				topValue = straightSuits[j][0].v;
 			}
 		}
 		return isStraightFlush;
@@ -110,15 +111,16 @@ export class RankerService {
 		if (cards.length < 5) return false;
 		var isFlush = false;
 		
-		//the aces have a temp value of 14, and pushed to the end of the array 
+		//the aces are pushed to the end of the array 
 		var cardsFlush = cards.slice(0);
 		for (var i = 0; i < cardsFlush.length; i++) {
 			if (cardsFlush[i].v == 1) {
-				cardsFlush[i].v = 14;	
 				cardsFlush.push(cardsFlush[i]);
 				cardsFlush.splice(i, 1);
 			}
 		}
+		//the cards get reversed
+		cardsFlush.reverse();
 		
 		// sSuit contains the spades cards, hSuit contains the hearts cards etc.
 		var sSuit = cardsFlush.filter( c => c.s == 's');
@@ -128,38 +130,25 @@ export class RankerService {
 		
 		// suits is an array : every item is a set of suited cards of the 5 best cards
 		var suits = [];
-		if (sSuit.length > 4) { suits.push({suit:sSuit.slice(-5)}) } 
-		if (hSuit.length > 4) { suits.push({suit:hSuit.slice(-5)}) }
-		if (cSuit.length > 4) { suits.push({suit:cSuit.slice(-5)}) }
-		if (dSuit.length > 4) { suits.push({suit:dSuit.slice(-5)}) }		
+		if (sSuit.length > 4) { suits.push(sSuit.slice(0,5)) } 
+		if (hSuit.length > 4) { suits.push(hSuit.slice(0,5)) }
+		if (cSuit.length > 4) { suits.push(cSuit.slice(0,5)) }
+		if (dSuit.length > 4) { suits.push(dSuit.slice(0,5)) }		
 
 		//if suits is empty, it means there is no flush, so no need to go futher 
 		if (suits.length == 0) return false;
 		
 		//compare the 5 cards in each suits
-		var topSuit = false;
-		for (var i=4; i > -1; i--) {
-			var topValue = -1;
-			var topEqual = false;
-			for (var j=0; j < suits.length; j++) {				
-				if (suits[j].suit[i].v = topValue) topEqual=true;
-				if (suits[j].suit[i].v > topValue) {
-					topValue = suits[j].suit[i].v;
-					topSuit = suits[j];
-					topEqual = false;
-				}
-			}
-			if (topEqual == false) {
-				isFlush = topSuit.map( c => { if (c.v == 14) { c.v = 1; return c;} else {return c} );}
-				return isFlush.reverse();
-			}
-		}
+		let suitInteger = suits.map( suits => this.subValCalc(5, suits));
+
+		let topSuitInteger = Math.max(...suitInteger);
 		
-		//the last case is the value of the cards of each flush are the same
-		topSuit = suits[0];
-		isFlush = topSuit.map( c => { if (c.v == 14) { c.v = 1; return c;} else {return c} );}
-		return isFlush.reverse();
-		
+		for (var j=0; j < suits.length; j++) {
+			if ( topSuitInteger = suitInteger[j] ) {
+				isFlush = suits[j].map( c => { if (c.v == 14) { c.v = 1; return c;} else {return c} });
+				return isFlush;
+			}
+		}				
 	}
 	
 	/*-------------------------------------------------------------------------------------*/	
@@ -238,10 +227,11 @@ export class RankerService {
 		if (matchFour == false) return false;		
 		
 		//remainingCards contains cards minus those from matchFour 		
-		var remainingCards = cards.filter ( c => c.v != matchFour[0]);  
+		var remainingCards = cards.filter( c => c.v != matchFour[0].v);  
 		
 		//we get the highest cards of the remaining cards
 		var highCard = remainingCards.slice(-1);
+		if (remaingCards[0].v == 1) highCard = remaingCards[0];  
 		
 		//we aggregate matchFour and highCard to have 5 cards
 		isFourOfAKind = matchFour.concat(highCard); 
@@ -265,7 +255,7 @@ export class RankerService {
 		if (matchThree == false) return false;
 
 		//remainingCards contains cards minus those from matchThree 		
-		var remainingCards = cards.filter ( c => c.v != matchThree[0]);  
+		var remainingCards = cards.filter( c => c.v != matchThree[0].v);  
 
 		//we get the highest pair of the remaining cards
 		//if no pair is found, highPair = false
@@ -296,12 +286,19 @@ export class RankerService {
 		if (matchThree == false) return false;
 		
 		//remainingCards1 contains cards minus those from matchThree 		
-		var remainingCards = cards.filter( c => c.v != matchThree[0]); 
+		var remainingCards = cards.filter( c => c.v != matchThree[0].v); 
 		
 		if (remainingCards.length != 0) {
+			var twoHighCards = [];
+			//if the first cards is an ace, we pick the first and the last cards for twoHighCards  
+			if (remainingCards[0].v == 1) { 
+				twoHighCards.push(remaingCards[0]); 
+				twoHighCards.push(remainingCards[remainingCards.length - 1]);
 			//twoHighCards stores the 2 highest cards from remainingCards, and put them back in desc order 
-			var twoHighCards = remainingCards.slice(-2).reverse();		
-			//we aggregate matchThree and twoHighCards to have 5 cards
+			} else {
+				twoHighCards = remainingCards.slice(-2).reverse();		
+			}
+			//we aggregate matchThree and twoHighCards to have 5 cards		
 			isThreeOfKind = matchThree.concat(twoHighCards); 
 			return isThreeOfKind;
 		} else {
@@ -326,7 +323,7 @@ export class RankerService {
 		if (highPair1 == false) return false;		
 
 		//remainingCards1 contains cards minus those from highPair1 		
-		var remainingCards1 = cards.filter ( c => c.v != highPair1[0]);  
+		var remainingCards1 = cards.filter ( c => c.v != highPair1[0].v);  
 
 		//highPair2 get the highest pair of remainingCards1
 		//if no pair is found, highPair2 = false
@@ -336,10 +333,11 @@ export class RankerService {
 		if (highPair2 == false) return false;			
 
 		//remainingCards2 contains remainingCards1 minus those from highPair2 		
-		var remainingCards2 = cards.filter ( c => c.v != highPair2[0]);  		
+		var remainingCards2 = cards.filter ( c => c.v != highPair2[0].v);  		
 
 		//highCard stores the highest card in remainingCards2
 		var highCard = remainingCards2.slice(-1);
+		if (remaingCards2[0].v == 1) highCard = remaingCards2[0]; 
 
 		//we aggregate highPair1, highPair2 and highCard to have 5 cards
 		isTwoPairs = highPair1.concat(highPair2, highCard);
@@ -361,11 +359,19 @@ export class RankerService {
 		if (highPair == false) return false;			
 
 		//remainingCards contains cards minus those from highPair		
-		var remainingCards = cards.filter ( c => c.v != highPair[0]);  
+		var remainingCards = cards.filter( c => c.v != highPair[0].v);  
 		
 		if (remainingCards.length != 1) {
+			var threeHighCards = [];
+			//if the first card is an ace, we pick the first and the last 2 cards for threeHighCards  
+			if (remainingCards[0].v == 1) { 
+				threeHighCards.push(remaingCards[0]); 
+				threeHighCards.push(remainingCards[remainingCards.length - 1]);
+				threeHighCards.push(remainingCards[remainingCards.length - 2]);
 			//threeHighCards stores the 3 highest cards from remainingCards, and put them back in desc order 
-			var threeHighCards = remainingCards.slice(-3).reverse()
+			} else {
+				threeHighCards = remainingCards.slice(-3).reverse()	;	
+			}		
 			//we aggregate highPair and threeHighCards
 			isOnePair = highPair.concat(threeHighCards);
 			return isOnePair; 
@@ -398,7 +404,7 @@ export class RankerService {
 		}
 		
 		//Special treatment for the ace
-		if (countV["v1"] >= x) topValue = i;
+		if (countV["v1"] >= x) topValue = 14;
 		
 		//if there's no match, topValue remains at false, so we don't go further
 		if (topValue == false) return false;
@@ -407,5 +413,26 @@ export class RankerService {
 		isXOfKind = cards.filter( c => c.v == topValue).slice(0,x);
 		return isXOfKind;
 	}
-
+	
+	/*-------------------------------------------------------------------------------------*/	
+	/*                                        subValCalc                                   */
+	/*-------------------------------------------------------------------------------------*/
+	
+	subValCalc (val, subValue)  {
+		let subValueString = subValue.map( 
+			c => switch (c) {
+				case 1 : return '14';
+				case 2 : return '02';
+				case 3 : return '03';
+				case 4 : return '04';
+				case 5 : return '05';
+				case 6 : return '06';
+				case 7 : return '07';
+				case 8 : return '08';
+				case 9 : return '09';
+				default : return '' + c ;
+			}
+		);
+		return parseInt('' + val + subValueString.join(''), 10);
+	}
 }
