@@ -1,0 +1,38 @@
+<div class="player">
+	<p class="namePlayer">Player {{player.num}} {{player.pos}}</p>
+	<div class="handDealt" dnd-sortable-container [dropZones]="['cards-zone']" [sortableData]="handDealt.cards" class="container13cards">
+		<div *ngFor="let card of handDealt.cards;let i = index" dnd-sortable [sortableIndex]="i">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="handPlayed">
+		<div id="firstHand">
+			<p class="titleHand">First</p>
+					<div dnd-sortable-container [dropZones]="['cards-zone']" [sortableData]="firstHandPlayed.cards" class="container3cards">
+						<div *ngFor="let card of firstHandPlayed.cards | slice:0:3;let i = index" dnd-sortable [sortableIndex]="i" class="cardPlayer" 
+						(onDropSuccess)="checkHandFirst(i)">
+							<img [src]="card.image" class="cardPlayer">
+						</div>
+					</div>
+		</div>
+		<div id="middleHand">
+			<p class="titleHand">Middle</p>
+					<div dnd-sortable-container [dropZones]="['cards-zone']" [sortableData]="middleHandPlayed.cards" class="container5cards">
+						<div *ngFor="let card of middleHandPlayed.cards | slice:0:5;let i = index" dnd-sortable [sortableIndex]="i" class="cardPlayer"
+						(onDropSuccess)="checkHandMiddle(i)">
+							<img [src]="card.image" class="cardPlayer">
+						</div>
+					</div>		
+		</div>
+		<div id="lastHand">
+			<p class="titleHand">Last</p>
+					<div dnd-sortable-container [dropZones]="['cards-zone']" [sortableData]="lastHandPlayed.cards" class="container5cards">
+						<div *ngFor="let card of lastHandPlayed.cards | slice:0:5;let i = index" dnd-sortable [sortableIndex]="i" class="cardPlayer"
+						(onDropSuccess)="checkHandLast(i)">
+							<img [src]="card.image" class="cardPlayer">
+						</div>
+					</div>	
+		</div>
+	</div>
+	<button [hidden]="evaluateButtonHidden" [disabled]="disableButton" class="buttonEvaluate" (click)="evaluate()"> Showdown </button>
+</div>

@@ -1,0 +1,25 @@
+<div class="scores">
+	<table>
+		<tr>
+			<th></th>
+			<th> Player 1 : {{playerNames.humanPlayer}} </th>
+			<th> Player 2 : {{playerNames.cpuLeft}} </th>
+			<th> Player 3 : {{playerNames.cpuMiddle}} </th>
+			<th> Player 4 : {{playerNames.cpuRight}} </th>
+		</tr>
+		<tr *ngFor="let player of arrayPointsByPlayer;let i = index">
+			<td></td>
+			<td> {{player.pp1}} </td>
+			<td> {{player.pp2}} </td>
+			<td> {{player.pp3}} </td>
+			<td> {{player.pp4}} </td>
+		</tr>
+		<tr>
+			<td> total </td>
+			<td> {{totalByPlayer.pp1}} </td>
+			<td> {{totalByPlayer.pp2}} </td>
+			<td> {{totalByPlayer.pp3}} </td>
+			<td> {{totalByPlayer.pp4}} </td>			
+		</tr>		
+	</table>
+</div>

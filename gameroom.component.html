@@ -1,0 +1,16 @@
+<div>
+	<app-board 
+		*ngIf="gameLoad"
+		(showResults)="showResults($event)"
+		[playerNames]="playerNames"
+	></app-board>
+	<app-results
+		*ngIf="allHands" 
+		[allHands]="allHands"	
+		(playAgain)="playAgain($event)"
+	></app-results>
+	<app-scores 
+		[playerNames]="playerNames"
+		[pointsByPlayer]="pointsByPlayer"
+	></app-scores>
+</div>

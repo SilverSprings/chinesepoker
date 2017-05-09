@@ -1,0 +1,26 @@
+<div id="topMenu">
+	<div *ngIf="noNameProvided">
+		Choose your name : <input #name>
+		<button [disabled]="name.value == ''" (click)="startGame(name.value)"> Start Game </button>
+	</div>
+	<div *ngIf="!noNameProvided">
+		<p> You're playing as {{playerNames.humanPlayer}} </p>
+		<button (click)="endGame()"> End Game </button>
+	</div>
+	<div *ngIf="rulesHidden">
+		<button (click)="showRules()"> Rules </button>
+	</div>
+	<div *ngIf="!rulesHidden">	
+		<button (click)="hideRules()"> Hide rules </button>
+	</div>
+	<div *ngIf="gameInProgress" id="gameIsHere">
+		<app-gameroom 
+		[playerNames]="playerNames"
+		[gameLoad]="gameInProgress"
+		></app-gameroom>
+	</div>
+	<div id="rulesAreHere">
+		<app-rules [hidden]="rulesHidden"></app-rules>
+		<a href="#gameIsHere"> Go back to the game </a>
+	</div>
+</div>

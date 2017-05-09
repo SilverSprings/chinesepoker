@@ -1,0 +1,131 @@
+<div class="headResult">
+	<div class="playersCol">  
+		<p>Players</p> 
+	</div>
+	<div class="firstHandCol">  
+		<p>First Hand</p> 
+	</div>
+	<div class="middleHandCol">  
+		<p>Middle Hand</p> 
+	</div>
+	<div class="lastHandCol">  
+		<p>Last Hand</p> 
+	</div>
+	<div class="pointsCol">  
+		<p>Points</p> 
+	</div>
+</div>
+
+<div class="playerName">
+	<div class="eachName">  
+		<p>Player {{allHands.player1Hand.name}}</p> 
+	</div>
+	<div class="eachName">
+		<p>Player {{allHands.player2Hand.name}}</p>
+	</div>
+	<div class="eachName">
+		<p>Player {{allHands.player3Hand.name}}</p>
+	</div>
+	<div class="eachName">
+		<p>Player {{allHands.player4Hand.name}}</p>
+	</div>	
+</div>
+
+<div class="firstHand">
+ 	<div class="P1fHand" [class.winner]="gameSummaryByHand.fp1">
+		<div *ngFor="let card of allHands.player1Hand.fHand.cards;let i = index" class="cardPlayer">  
+			<img [src]="card.image" class="cardPlayer">  
+		</div> </div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.fp2"> 
+		<div *ngFor="let card of allHands.player2Hand.fHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.fp3">
+		<div *ngFor="let card of allHands.player3Hand.fHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.fp4">
+		<div *ngFor="let card of allHands.player4Hand.fHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+</div>
+
+<div class="middleHand">
+ 	<div class="P1fHand" [class.winner]="gameSummaryByHand.mp1">
+		<div *ngFor="let card of allHands.player1Hand.mHand.cards;let i = index" class="cardPlayer">  
+			<img [src]="card.image" class="cardPlayer">  
+		</div> </div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.mp2">
+		<div *ngFor="let card of allHands.player2Hand.mHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.mp3">
+		<div *ngFor="let card of allHands.player3Hand.mHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.mp4">
+		<div *ngFor="let card of allHands.player4Hand.mHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+</div>
+
+<div class="lastHand">
+ 	<div class="P1fHand" [class.winner]="gameSummaryByHand.lp1">
+		<div *ngFor="let card of allHands.player1Hand.lHand.cards;let i = index" class="cardPlayer">  
+			<img [src]="card.image" class="cardPlayer">  
+		</div> </div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.lp2">
+		<div *ngFor="let card of allHands.player2Hand.lHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.lp3">
+		<div *ngFor="let card of allHands.player3Hand.lHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+	<div class="P1fHand" [class.winner]="gameSummaryByHand.lp4">
+		<div *ngFor="let card of allHands.player4Hand.lHand.cards;let i = index" class="cardPlayer">
+			<img [src]="card.image" class="cardPlayer">
+		</div>
+	</div>
+</div>
+
+<div class="gamePoints">
+	<div class="eachPoint">  
+		<p>{{pointsByPlayer.pp1}}</p>
+		<div *ngIf="1==scooper.playerNum" class="boldPlayerWin">
+			<p>Winner of the game</p> 
+		</div>		
+	</div>
+	<div class="eachPoint">  
+		<p>{{pointsByPlayer.pp2}}</p>
+		<div *ngIf="2==scooper.playerNum" class="boldPlayerWin">
+			<p>Winner of the game</p> 
+		</div>			
+	</div>
+	<div class="eachPoint">  
+		<p>{{pointsByPlayer.pp3}}</p>
+		<div *ngIf="3==scooper.playerNum" class="boldPlayerWin">
+			<p>Winner of the game</p> 
+		</div>	
+	</div>
+	<div class="eachPoint">  
+		<p>{{pointsByPlayer.pp4}}</p>
+		<div *ngIf="4==scooper.playerNum" class="boldPlayerWin">
+			<p>Winner of the game</p> 
+		</div>	
+	</div>	
+</div>
+
+<div *ngIf="scooper.noScooper" class="scooper">
+	<p>There is no winner this time</p> 
+</div>
+
+<button class="buttonPlayAgain" (click)="anotherGame()"> Play Again </button>

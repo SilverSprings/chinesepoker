@@ -1,0 +1,3 @@
+	<p class="namePlayer">Player {{playerNumName.num}} {{playerNumName.name}}</p>
+	<img *ngIf="player.num !=3" [src]="urlOfCoverStackImg" class="otherPlayerCards">
+	<img *ngIf="player.num ==3" [src]="urlOfCoverStackImg" class="otherPlayerCards3">
